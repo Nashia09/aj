@@ -6,12 +6,12 @@ import Button from "../Button";
 
 const memories = [
   {
-    imageSrc: "/assets/her.jpg",
+    imageSrc: "/assets/her1.jpg",
     caption:
       "The first time I saw your smile, I knew my world would never be the same.",
   },
   {
-    imageSrc: "/assets/her1.jpg",
+    imageSrc: "/assets/her.jpg",
     caption:
       "Every laugh we shared became a melody I never want to stop hearing.",
   },
@@ -20,12 +20,12 @@ const memories = [
       "You taught me that love isn't perfect — it's patient, it's forgiving.",
   },
   {
-    imageSrc: "/assets/her.jpg",
+    imageSrc: "/assets/her1.jpg",
     caption:
-      "This moment… I keep replaying it in my head, wishing I could go back.",
+      "Your deep, piercing eyes got me hooked",
   },
   {
-    imageSrc: "/assets/her1.jpg",
+    imageSrc: "/assets/her.jpg",
     caption:
       "With you, even the ordinary becomes magical. You are my magic, Ajike.",
   },
@@ -41,7 +41,7 @@ export default function PhotoTimeline({ onContinue }) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          Our memories
+          The Queen
         </motion.p>
 
         <motion.h2
@@ -51,7 +51,7 @@ export default function PhotoTimeline({ onContinue }) {
           viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.8 }}
         >
-          Moments I&apos;ll never forget…
+          Your royal majesty…you mean so much to me...
         </motion.h2>
 
         {/* Timeline line */}

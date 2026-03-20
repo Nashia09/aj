@@ -1,9 +1,44 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import Button from "../Button";
 
 export default function FinalApology() {
+  const [noPos, setNoPos] = useState({ x: 0, y: 0 });
+  const [noSize, setNoSize] = useState(1);
+  const [yesSize, setYesSize] = useState(1);
+  const [noAttempts, setNoAttempts] = useState(0);
+
+  const funnyTexts = [
+    "Can we start again?",
+    "Are you sure? 🥺",
+    "Really? Think again…",
+    "You're breaking my heart 💔",
+    "Okay fine… but are you SURE?",
+    "Last chance… please? 🥹",
+    "I won't give up! 😤❤️",
+  ];
+
+  const handleNoHover = useCallback(() => {
+    // Move the No button to a random position
+    const randX = (Math.random() - 0.5) * 250;
+    const randY = (Math.random() - 0.5) * 200;
+    setNoPos({ x: randX, y: randY });
+    setNoAttempts((prev) => prev + 1);
+    // Shrink No, grow Yes
+    setNoSize((prev) => Math.max(prev * 0.75, 0.3));
+    setYesSize((prev) => Math.min(prev * 1.15, 2));
+  }, []);
+
+  const handleYes = useCallback(() => {
+    const message = encodeURIComponent("Let's do it my love");
+    const phone = "2349092313062";
+    window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
+  }, []);
+
+  const displayText = funnyTexts[Math.min(noAttempts, funnyTexts.length - 1)];
+
   return (
     <section className="min-h-[100dvh] flex flex-col items-center justify-center px-6 py-16 relative">
       {/* Soft glow behind text */}
@@ -74,35 +109,64 @@ export default function FinalApology() {
           isn&apos;t something I ever want to get used to.
         </motion.p>
 
-        {/* CTA Buttons */}
+        {/* Dynamic question text */}
+        <motion.p
+          key={displayText}
+          className="text-[#ff6b81] text-lg font-playfair mb-8"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          {displayText}
+        </motion.p>
+
+        {/* Yes / No buttons */}
         <motion.div
-          className="space-y-4"
+          className="relative flex items-center justify-center gap-6 min-h-[120px]"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 1.5, duration: 0.6 }}
         >
-          <Button>
-            Can we start again? 💕
-          </Button>
+          {/* YES button — grows with each No attempt */}
+          <motion.div
+            animate={{ scale: yesSize }}
+            transition={{ type: "spring", stiffness: 200 }}
+          >
+            <Button onClick={handleYes}>
+              Yes 💕
+            </Button>
+          </motion.div>
 
-          <div className="flex gap-3 justify-center mt-4">
-            <Button
-              variant="ghost"
-              href="https://wa.me/"
-              target="_blank"
-              rel="noopener noreferrer"
+          {/* NO button — runs away on hover/touch */}
+          <motion.div
+            animate={{ x: noPos.x, y: noPos.y, scale: noSize }}
+            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+          >
+            <motion.button
+              onMouseEnter={handleNoHover}
+              onTouchStart={handleNoHover}
+              onClick={handleNoHover}
+              className="px-6 py-3 rounded-full border border-white/10 bg-white/5 text-white/40 text-sm font-inter cursor-pointer transition-colors hover:border-white/20"
+              whileTap={{ scale: 0.9 }}
             >
-              💬 WhatsApp
-            </Button>
-            <Button
-              variant="ghost"
-              href="tel:"
-            >
-              📞 Call me
-            </Button>
-          </div>
+              No 😢
+            </motion.button>
+          </motion.div>
         </motion.div>
+
+        {/* Funny message after attempts */}
+        {noAttempts >= 3 && (
+          <motion.p
+            className="text-white/30 text-xs font-inter mt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            {noAttempts >= 5
+              ? "See? Even the button knows you should say yes! 😂❤️"
+              : "The No button is shy… it doesn't want you to pick it 🙈"}
+          </motion.p>
+        )}
 
         {/* Signature */}
         <motion.p
